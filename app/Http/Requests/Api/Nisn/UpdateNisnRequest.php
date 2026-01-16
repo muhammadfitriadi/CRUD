@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\Nisn;
+namespace App\Http\Requests\Api\Nisn;
 
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
@@ -24,17 +24,23 @@ class UpdateNisnRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
-            'nama' => 'required|string|max:255',
-            'nisn' => [
-                'required',
-                'max:255',
-                Rule::unique('nisn', 'nisn')->ignore(
-                    $this->route('nisn')->id
-                ),
-            ],
-        ];
-
+    return [
+        'nisn' => [
+            'required',
+            'max:255',
+            Rule::unique('nisn', 'nisn')
+                ->ignore($this->route('nisn')), // ✅ INI FIX UTAMA
+        ],
+        'nama' => 'required|string|max:255',
+    ];
+            
     }
 
+    protected function failedValidation(Validator $validator)
+    {
+        throw new HttpResponseException(response()->json([
+            'message' => 'Validation error',
+            'errors' => $validator->errors(),
+        ], 422));
+    }
 }

@@ -50,8 +50,4 @@ class AuthController extends Controller
         }
     }
 
-    public function lgout(Request $request)
-    {
-        # code...
-    }
 }

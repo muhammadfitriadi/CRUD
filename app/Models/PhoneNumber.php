@@ -12,7 +12,8 @@ class PhoneNumber extends Model
         'siswa_id',
     ];
 
-    public function siswas(){
-        return $this->belongsTo(Siswas::class, "siswa_id");
+    public function siswa()
+    {
+        return $this->belongsTo(Siswa::class);
     }
 }

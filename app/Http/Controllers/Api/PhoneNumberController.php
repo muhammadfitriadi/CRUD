@@ -1,11 +1,10 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\Controller;
+use App\Http\Requests\Api\PhoneNumber\StorePhoneNumberRequest;
 use App\Models\PhoneNumber;
-use App\Http\Requests\PhoneNumber\StorePhoneNumberRequest;
-use App\Http\Requests\PhoneNumber\UpdatePhoneNumberRequest;
-use App\Models\Siswa;
 use App\Models\Siswas;
 use DB;
 use Illuminate\Http\Request;
@@ -18,8 +17,13 @@ class PhoneNumberController extends Controller
     public function index()
     {
         $siswas = Siswas::with('phone_number')->get();
-        return view('phone_number.index', compact('siswas'));
+
+        return response()->json([
+            'message' => "Success get data Siswa and Phone Number",
+            'data' => $siswas
+        ], 200);
     }
+
 
 
     /**
@@ -44,7 +48,9 @@ class PhoneNumberController extends Controller
             ]);
         }
 
-        return redirect()->route('phone-number.index');
+        return response()->json([
+            'message' => "Success create data Siswa and Phone Number"
+        ], 201);
 
     }
 
@@ -82,7 +88,9 @@ class PhoneNumberController extends Controller
             }
         });
 
-        return redirect()->route('phone-number.index');
+        return response()->json([
+            'message' => "Success edit data Siswa and Phone Number"
+        ], 201);
     }
     /**
      * Remove the specified resource from storage.
@@ -91,8 +99,9 @@ class PhoneNumberController extends Controller
     {
         PhoneNumber::where('siswa_id', $id)->delete();
 
-        return redirect()->route('phone-number.index')
-            ->with('success', 'Semua nomor dihapus');
+        return response()->json([
+            'message' => "Success delete data Siswa and Phone Number"
+        ], 201);
     }
 
 }

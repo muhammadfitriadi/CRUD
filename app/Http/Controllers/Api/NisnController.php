@@ -1,12 +1,14 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\Controller;
+use App\Http\Requests\Api\Nisn\StoreNisnRequest;
+use App\Http\Requests\Api\Nisn\UpdateNisnRequest;
 use App\Models\Nisn;
 use App\Models\Siswa;
-use App\Http\Requests\Nisn\StoreNisnRequest;
-use App\Http\Requests\Nisn\UpdateNisnRequest;
 use DB;
+use Illuminate\Http\Request;
 
 class NisnController extends Controller
 {
@@ -16,8 +18,10 @@ class NisnController extends Controller
     public function index()
     {
         $nisns = Nisn::with('siswa')->get();
-        $siswas = Siswa::all();
-        return view('nisn.index', compact('nisns', 'siswas'));
+        return response()->json([
+            'message' => 'Succses get data Siswa dan Nisn',
+            'data' => $nisns
+        ], 200);
     }
 
     /**
@@ -33,7 +37,7 @@ class NisnController extends Controller
      */
     public function store(StoreNisnRequest $request)
     {
-        DB::transaction(function () use ($request) {
+        DB::transaction(function () use ($request, &$siswa) {
             $siswa = Siswa::create([
                 'nama' => $request->nama
             ]);
@@ -43,7 +47,10 @@ class NisnController extends Controller
             ]);
         });
 
-        return redirect()->route('nisn.index');
+        return response()->json([
+            'message' => 'Success create data Siswa dan NISN',
+            'data' => $siswa->load('nisn')
+        ], 201);
     }
 
     /**
@@ -72,13 +79,19 @@ class NisnController extends Controller
             $nisn->siswa()->update([
                 'nama' => $request->nama,
             ]);
+
             $nisn->update([
                 'nisn' => $request->nisn,
             ]);
         });
 
-        return redirect()->route('nisn.index');
+        return response()->json([
+            'message' => 'Success update data Siswa dan NISN',
+            'data' => $nisn->load('siswa'),
+        ], 201);
     }
+
+
 
 
     /**
@@ -87,6 +100,10 @@ class NisnController extends Controller
     public function destroy(Nisn $nisn)
     {
         $nisn->delete($nisn->id);
-        return redirect()->route('nisn.index');
+        
+        return response()->json([
+            'message' => 'Success delete data Siswa dan NISN',
+            'data' => $nisn->load('siswa'),
+        ], 201);
     }
 }

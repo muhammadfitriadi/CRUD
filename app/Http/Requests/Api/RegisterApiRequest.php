@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Http\Requests\Hobbies;
+namespace App\Http\Requests\Api;
 
-use Illuminate\Contracts\Validation\Validator;
+use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Contracts\Validation\Validator;
 
-class UpdateHobbiesRequest extends FormRequest
+class RegisterApiRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -21,10 +22,14 @@ class UpdateHobbiesRequest extends FormRequest
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
+
     public function rules(): array
     {
         return [
-            'hobby' => 'required|max:255'
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users',
+            'password' => 'required|min:8|confirmed',
+            'password_confirmation' => 'required'
         ];
     }
 

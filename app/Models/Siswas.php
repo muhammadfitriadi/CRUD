@@ -13,7 +13,7 @@ class Siswas extends Model
 
     public function phone_number()
     {
-        return $this->hasMany(PhoneNumber::class);
+        return $this->hasMany(PhoneNumber::class, 'siswa_id','id');
     }
 
     public function hobbies()

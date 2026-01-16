@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Requests\Nisn;
+namespace App\Http\Requests\Api\PhoneNumber;
 
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class StoreNisnRequest extends FormRequest
+class UpdatePhoneNumberRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,8 +24,15 @@ class StoreNisnRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'nisn' => 'required|max:255|unique:nisn',
-            'nama' => 'required|max:255'
+            //
         ];
+    }
+
+    protected function failedValidation(Validator $validator)
+    {
+        throw new HttpResponseException(response()->json([
+            'message' => 'Validation error',
+            'errors' => $validator->errors(),
+        ], 422));
     }
 }

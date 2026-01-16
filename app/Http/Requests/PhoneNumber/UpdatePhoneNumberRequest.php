@@ -23,7 +23,8 @@ class UpdatePhoneNumberRequest extends FormRequest
     {
         return [
             'siswa_id' => 'required|exists:siswas,id',
-            'phone_number' => 'required'
+            'phone_number' => 'required|array',
+            'phone_number.*' => 'required|string|max:15',
         ];
     }
 }

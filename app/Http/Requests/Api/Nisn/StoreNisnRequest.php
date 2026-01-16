@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\Nisn;
+namespace App\Http\Requests\Api\Nisn;
 
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
@@ -25,7 +25,16 @@ class StoreNisnRequest extends FormRequest
     {
         return [
             'nisn' => 'required|max:255|unique:nisn',
+            // 'siswa_id' => 'required|exists:siswa,id',
             'nama' => 'required|max:255'
         ];
+    }
+
+    protected function failedValidation(Validator $validator)
+    {
+        throw new HttpResponseException(response()->json([
+            'message' => 'Validation error',
+            'errors' => $validator->errors(),
+        ], 422));
     }
 }

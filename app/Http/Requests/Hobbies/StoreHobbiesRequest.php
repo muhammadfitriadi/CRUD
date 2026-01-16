@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests\Hobbies;
 
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class StoreHobbiesRequest extends FormRequest
 {
@@ -24,5 +26,13 @@ class StoreHobbiesRequest extends FormRequest
         return [
             'hobby' => 'required|max:255'
         ];
+    }
+
+    protected function failedValidation(Validator $validator)
+    {
+        throw new HttpResponseException(response()->json([
+            'message' => 'Validation error',
+            'errors' => $validator->errors(),
+        ], 422));
     }
 }
