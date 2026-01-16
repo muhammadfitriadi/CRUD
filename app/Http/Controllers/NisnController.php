@@ -6,6 +6,7 @@ use App\Models\Nisn;
 use App\Models\Siswa;
 use App\Http\Requests\Nisn\StoreNisnRequest;
 use App\Http\Requests\Nisn\UpdateNisnRequest;
+use DB;
 
 class NisnController extends Controller
 {
@@ -16,7 +17,7 @@ class NisnController extends Controller
     {
         $nisns = Nisn::with('siswa')->get();
         $siswas = Siswa::all();
-        return view('nisn.index', compact('nisns','siswas'));
+        return view('nisn.index', compact('nisns', 'siswas'));
     }
 
     /**
@@ -32,7 +33,18 @@ class NisnController extends Controller
      */
     public function store(StoreNisnRequest $request)
     {
-        Nisn::create($request->validated());
+        DB::transaction(function () use ($request) {
+            $siswa = Siswa::create([
+                'nama' => $request->nama
+            ]);
+
+            $siswa->nisn()->create([
+                'nisn' => $request->nisn
+            ]);
+        });
+
+        return redirect()->route('nisn.index');
+
         return redirect()->route('nisn.index');
     }
 

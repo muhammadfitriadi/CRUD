@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\SiswaHobbies;
+namespace App\Http\Requests\SiswaHobies;
 
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -22,8 +22,7 @@ class UpdateSiswaHobiesRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'siswa_ids' => 'required|array',
-            'siswa_ids.*' => 'integer|exists:siswas,id',
+            'siswa_id' => 'required|exists:siswas,id',
             'hobbies_ids' => 'required|array',
             'hobbies_ids.*' => 'integer|exists:hobbies,id',
         ];

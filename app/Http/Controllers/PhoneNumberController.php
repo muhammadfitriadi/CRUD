@@ -16,7 +16,7 @@ class PhoneNumberController extends Controller
     {
         $phoneNumbers = PhoneNumber::with('siswas')->get();
         $siswas = Siswas::all();
-        return view('phone_number.index',compact('phoneNumbers', 'siswas'));
+        return view('phone_number.index', compact('phoneNumbers', 'siswas'));
     }
 
     /**
@@ -32,8 +32,17 @@ class PhoneNumberController extends Controller
      */
     public function store(StorePhoneNumberRequest $request)
     {
-        PhoneNumber::create($request->validated());
+        $validated = $request->validated();
+
+        foreach ($validated['phone_number'] as $number) {
+            PhoneNumber::create([
+                'siswa_id' => $validated['siswa_id'],
+                'phone_number' => $number,
+            ]);
+        }
+
         return redirect()->route('phone-number.index');
+
     }
 
     /**

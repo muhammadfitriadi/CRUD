@@ -23,7 +23,8 @@ class UpdateNisnRequest extends FormRequest
     {
         return [
             'nisn' => 'required|max:255|unique:nisn',
-            'siswa_id' => 'required|exists:siswa,id'
+            // 'siswa_id' => 'required|exists:siswa,id'
+            'nama' => 'required|max:255'
         ];
     }
 }

@@ -45,10 +45,10 @@
                         <th scope="row">{{ $nisn->nisn }}</th>
                         <td>{{ $nisn->siswa->nama }}</td>
                         <td>
-                            <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editModal{{ $nisn->id }}"
-                                data-bs-whatever="@mdo">Edit</button>
-                            <div class="modal fade" id="editModal{{ $nisn->id }}" tabindex="-1" aria-labelledby="exampleModalLabel"
-                                aria-hidden="true">
+                            <button type="button" class="btn btn-warning" data-bs-toggle="modal"
+                                data-bs-target="#editModal{{ $nisn->id }}" data-bs-whatever="@mdo">Edit</button>
+                            <div class="modal fade" id="editModal{{ $nisn->id }}" tabindex="-1"
+                                aria-labelledby="exampleModalLabel" aria-hidden="true">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
                                         <div class="modal-header">
@@ -57,8 +57,8 @@
                                                 aria-label="Close"></button>
                                         </div>
                                         <form method="POST" action={{ route('nisn.update', $nisn)  }}>
-                                            @method('PUT')
                                             @csrf
+                                            @method('PUT')
                                             <div class="modal-body">
                                                 <div class="mb-3">
                                                     <label for="nama" class="col-form-label">Nisn</label>
@@ -66,13 +66,9 @@
                                                         placeholder="Example" value="{{ $nisn->nisn }}">
                                                 </div>
                                                 <div class="mb-3">
-                                                    <label for="siswa_id" class="col-form-label">nisn</label>
-                                                    <select id="siswa_id" name="siswa_id">
-                                                        <option value={{ $nisn->siswa->siswa_id }} selected disabled hidden>{{ $nisn->siswa->nama  }}</option>
-                                                        @foreach ($siswas as $siswa)
-                                                            <option value="{{ $siswa->id }}">{{ $siswa->nama }}</option>
-                                                        @endforeach
-                                                    </select>
+                                                    <label for="siswa_id" class="col-form-label">Nama</label>
+                                                    <input type="text" class="form-control" id="nama" name="nama"
+                                                        placeholder="Example" value="{{ $nisn->siswa->nama }}">
                                                 </div>
                                             </div>
                                             <div class="modal-footer">
@@ -88,8 +84,8 @@
                                 data-bs-target="#exampleModals{{ $nisn->id }}">
                                 Delete
                             </button>
-                            <div class="modal fade" id="exampleModals{{ $nisn->id }}" tabindex="-1" aria-labelledby="exampleModalLabel"
-                                aria-hidden="true">
+                            <div class="modal fade" id="exampleModals{{ $nisn->id }}" tabindex="-1"
+                                aria-labelledby="exampleModalLabel" aria-hidden="true">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
                                         <div class="modal-header">
@@ -129,17 +125,12 @@
                         @csrf
                         <div class="modal-body">
                             <div class="mb-3">
-                                <label for="nama" class="col-form-label">Nisn</label>
-                                <input type="text" class="form-control" id="nisn" name="nisn" placeholder="Example">
+                                <label for="siswa_id" class="col-form-label">Nama</label>
+                                <input type="text" class="form-control" id="nama" name="nama" placeholder="Example">
                             </div>
                             <div class="mb-3">
-                                <label for="siswa_id" class="col-form-label">nisn</label>
-                                <select id="siswa_id" name="siswa_id">
-                                    <option value="" selected disabled hidden>Choose here</option>
-                                    @foreach ($siswas as $siswa)
-                                        <option value="{{ $siswa->id }}">{{ $siswa->nama }}</option>
-                                    @endforeach
-                                </select>
+                                <label for="nama" class="col-form-label">Nisn</label>
+                                <input type="text" class="form-control" id="nisn" name="nisn" placeholder="Example">
                             </div>
                         </div>
                         <div class="modal-footer">

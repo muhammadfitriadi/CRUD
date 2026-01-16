@@ -132,11 +132,12 @@
                         <div class="modal-body">
                             <div class="mb-3">
                                 <label for="nama" class="col-form-label">phone-number</label>
-                                <input type="text" class="form-control" id="phone_number" name="phone_number"
-                                    placeholder="Example">
+                                <div class="parent">
                             </div>
+                            <button type="button" class="btn btn-primary " id="plus">+</button>
+                            <button type="button" class="btn btn-danger" id="del">Del</button>
                             <div class="mb-3">
-                                <label for="siswa_id" class="col-form-label">Siswa</label>
+                                <label for="siswa_id" class="col-form-label">Pilih Siswa</label>
                                 <select id="siswa_id" name="siswa_id">
                                     <option value="" selected disabled hidden>Choose here</option>
                                     @foreach ($siswas as $siswa)
@@ -158,6 +159,19 @@
     </div>
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script>
+
+$('#plus').on('click', function(){
+    $('.parent').append('<input type="text" class="form-control phone_input" name="phone_number[]" placeholder="Example">');
+});
+
+$('#del').on('click', function(e) {
+    e.preventDefault();
+    $('.parent .phone_input').last().remove();
+});
+
+    </script>
 </body>
 
 </html>

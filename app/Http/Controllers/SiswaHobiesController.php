@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Hobbies;
 use App\Models\HobbySiswa;
-use App\Models\SiswaHobies;
 use App\Http\Requests\SiswaHobies\StoreSiswaHobiesRequest;
 use App\Http\Requests\SiswaHobies\UpdateSiswaHobiesRequest;
 use App\Models\Siswas;
@@ -63,16 +62,28 @@ class SiswaHobiesController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateSiswaHobiesRequest $request, HobbySiswa $siswaHobies)
+    public function update(UpdateSiswaHobiesRequest $request, $id)
     {
-        //
+
+        HobbySiswa::where('siswa_id', $id)->delete();
+
+        foreach ($request->hobbies_ids as $hobby_id) {
+            HobbySiswa::create([
+                'siswa_id' => $id,
+                'hobby_id' => $hobby_id
+            ]);
+        }
+
+        return redirect()
+            ->route('siswa-hobbies.index');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(HobbySiswa $siswaHobies)
+    public function destroy($id)
     {
-        //
+        HobbySiswa::where('siswa_id', $id)->delete();
+        return redirect()->route('siswa-hobbies.index');
     }
 }
