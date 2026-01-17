@@ -41,17 +41,22 @@ class PhoneNumberController extends Controller
     {
         $validated = $request->validated();
 
-        foreach ($validated['phone_number'] as $number) {
-            PhoneNumber::create([
-                'siswa_id' => $validated['siswa_id'],
-                'phone_number' => $number,
+        DB::transaction(function () use ($validated, &$siswa) {
+            $siswa = Siswas::create([
+                'nama' => $validated['nama'],
             ]);
-        }
+
+            foreach ($validated['phone_number'] as $number) {
+                if (!empty($number)) {
+                    $siswa->phone_number()->create(['phone_number' => $number]);
+                }
+            }
+        });
 
         return response()->json([
-            'message' => "Success create data Siswa and Phone Number"
+            'message' => "Success create data Siswa and Phone Number",
+            'data' => $siswa->load('phone_number')
         ], 201);
-
     }
 
     /**
@@ -75,33 +80,42 @@ class PhoneNumberController extends Controller
      */
 
 
-    public function update(Request $request, $id)
+    public function update(StorePhoneNumberRequest $request, $id)
     {
         $siswa = Siswas::findOrFail($id);
+        $validated = $request->validated();
 
-        DB::transaction(function () use ($siswa, $request) {
+        DB::transaction(function () use ($siswa, $validated) {
             $siswa->phone_number()->delete();
-            foreach ($request->phone_number as $phone) {
-                if (!empty($phone)) {
-                    $siswa->phone_number()->create(['phone_number' => $phone]);
+            $siswa->update(['nama' => $validated['nama']]);
+
+            foreach ($validated['phone_number'] as $number) {
+                if (!empty($number)) {
+                    $siswa->phone_number()->create(['phone_number' => $number]);
                 }
             }
         });
 
         return response()->json([
-            'message' => "Success edit data Siswa and Phone Number"
-        ], 201);
+            'message' => "Success edit data Siswa and Phone Number",
+            'data' => $siswa->load('phone_number')
+        ], 200);
     }
     /**
      * Remove the specified resource from storage.
      */
     public function destroy($id)
     {
-        PhoneNumber::where('siswa_id', $id)->delete();
+        $siswa = Siswas::findOrFail($id);
+
+        DB::transaction(function () use ($siswa) {
+            $siswa->phone_number()->delete();
+            $siswa->delete();
+        });
 
         return response()->json([
             'message' => "Success delete data Siswa and Phone Number"
-        ], 201);
+        ], 200);
     }
 
 }

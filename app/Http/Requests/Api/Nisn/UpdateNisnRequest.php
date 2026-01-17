@@ -24,16 +24,16 @@ class UpdateNisnRequest extends FormRequest
      */
     public function rules(): array
     {
-    return [
-        'nisn' => [
-            'required',
-            'max:255',
-            Rule::unique('nisn', 'nisn')
-                ->ignore($this->route('nisn')), // ✅ INI FIX UTAMA
-        ],
-        'nama' => 'required|string|max:255',
-    ];
-            
+        return [
+            'nisn' => [
+                'required',
+                'max:255',
+                Rule::unique('nisn', 'nisn')->ignore(
+                    $this->route('nisn')->id
+                ),
+            ],
+            'nama' => 'required|max:255',
+        ];
     }
 
     protected function failedValidation(Validator $validator)

@@ -24,7 +24,9 @@ class UpdatePhoneNumberRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'nama' => 'required|string',
+            'phone_number' => 'required|array',
+            'phone_number.*' => 'required|string|max:15',
         ];
     }
 

@@ -24,7 +24,7 @@ class StorePhoneNumberRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'siswa_id' => 'required|exists:siswas,id',
+            'nama' => 'required|string',
             'phone_number' => 'required|array',
             'phone_number.*' => 'required|string|max:15',
         ];

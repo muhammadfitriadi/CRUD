@@ -7,6 +7,7 @@ use App\Http\Requests\Api\Nisn\StoreNisnRequest;
 use App\Http\Requests\Api\Nisn\UpdateNisnRequest;
 use App\Models\Nisn;
 use App\Models\Siswa;
+use App\Models\Siswas;
 use DB;
 use Illuminate\Http\Request;
 
@@ -47,9 +48,12 @@ class NisnController extends Controller
             ]);
         });
 
+        $siswas = Siswas::create([
+            'nama' => $request->nama
+        ]);
         return response()->json([
             'message' => 'Success create data Siswa dan NISN',
-            'data' => $siswa->load('nisn')
+            'data' => $siswas
         ], 201);
     }
 
@@ -84,10 +88,12 @@ class NisnController extends Controller
                 'nisn' => $request->nisn,
             ]);
         });
-
+        // $siswas = Siswas::update([
+        //     'nama' => $request->nama
+        // ]);
         return response()->json([
             'message' => 'Success update data Siswa dan NISN',
-            'data' => $nisn->load('siswa'),
+            'data' => $nisn,
         ], 201);
     }
 
@@ -99,11 +105,14 @@ class NisnController extends Controller
      */
     public function destroy(Nisn $nisn)
     {
-        $nisn->delete($nisn->id);
-        
+
+        DB::transaction(function () use ($nisn) {
+            $nisn->siswa()->delete();
+            $nisn->delete();
+        });
         return response()->json([
             'message' => 'Success delete data Siswa dan NISN',
-            'data' => $nisn->load('siswa'),
+            // 'data' => $nisn->load('siswa'),
         ], 201);
     }
 }
